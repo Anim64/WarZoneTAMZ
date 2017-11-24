@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/andengineLibrary/AndEngine-GLES2-AnchorCenter/AndEngine-GLES2-AnchorCenter.iml" filepath="$PROJECT_DIR$/andengineLibrary/AndEngine-GLES2-AnchorCenter/AndEngine-GLES2-AnchorCenter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WarZone.iml" filepath="$PROJECT_DIR$/WarZone.iml" />
+      <module fileurl="file://$PROJECT_DIR$/andengineLibrary/andengineLibrary.iml" filepath="$PROJECT_DIR$/andengineLibrary/andengineLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+    </modules>
+  </component>
+</project>
