@@ -1,7 +1,7 @@
-# AssaultTAMZ
+# WarZoneTAMZ
 ![Image of Contra](https://static.getjar.com/ss/0c/863522_2.jpg)
 
-Assault is a 2D action and platform game where you control elite soldier. 
+WarZone is a 2D action and platform game where you control elite soldier. 
 You have to fight against the invading forces. The game brings all the fun plazers had when playing it's ancestors, such as Contra.
 
 The goal is simple, bring destruction upon your enemies and survive as you progress through levels.
