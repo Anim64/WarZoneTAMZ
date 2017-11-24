@@ -1,2 +1,0 @@
-include ':app'
-include ':andengineLibrary:AndEngine-GLES2-AnchorCenter'
