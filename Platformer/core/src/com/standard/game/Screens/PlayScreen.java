@@ -3,9 +3,11 @@ package com.standard.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -26,6 +28,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.standard.game.PlatformerGame;
 import com.standard.game.Scenes.HUD;
 import com.standard.game.Sprites.Player;
+import com.standard.game.Tools.B2WorldCreator;
+import com.standard.game.Tools.WorldContactListener;
 
 /**
  * Created by Standard on 02.12.2017.
@@ -34,6 +38,8 @@ import com.standard.game.Sprites.Player;
 public class PlayScreen implements Screen
 {
     private PlatformerGame game;
+    private TextureAtlas playerAtlas;
+    private TextureAtlas enemiesAtlas;
 
     private OrthographicCamera gameCamera;
     private Viewport gamePort;
@@ -49,8 +55,12 @@ public class PlayScreen implements Screen
 
      private Player player;
 
+    private Music music;
+
     public PlayScreen(PlatformerGame game)
     {
+        playerAtlas = new TextureAtlas("Player.pack");
+        enemiesAtlas = new TextureAtlas("Enemies.pack");
         this.game = game;
 
         gameCamera = new OrthographicCamera();
@@ -69,55 +79,28 @@ public class PlayScreen implements Screen
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        player = new Player(world);
+        new B2WorldCreator(this);
+
+        //create player
+        player = new Player(this);
+
+        world.setContactListener(new WorldContactListener());
+
+        music = PlatformerGame.manager.get("music/music.ogg", Music.class);
+        music.setLooping(true);
+        music.play();
 
 
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fDef = new FixtureDef();
-        Body body;
+    }
 
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class))
-        {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+    public TextureAtlas getPlayerAtlas()
+    {
+        return playerAtlas;
+    }
 
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / PlatformerGame.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth()/2/ PlatformerGame.PPM, rect.getHeight()/2/ PlatformerGame.PPM);
-            fDef.shape = shape;
-            body.createFixture(fDef);
-        }
-
-        for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class))
-        {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / PlatformerGame.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth()/2/ PlatformerGame.PPM, rect.getHeight()/2/ PlatformerGame.PPM);
-            fDef.shape = shape;
-            body.createFixture(fDef);
-        }
-
-        for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class))
-        {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / PlatformerGame.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth()/2/ PlatformerGame.PPM, rect.getHeight()/2/ PlatformerGame.PPM);
-            fDef.shape = shape;
-            body.createFixture(fDef);
-        }
+    public TextureAtlas getEnemiesAtlas()
+    {
+        return enemiesAtlas;
     }
 
     @Override
@@ -149,6 +132,11 @@ public class PlayScreen implements Screen
         handleInput(dt);
 
         world.step(1/60f, 6, 2);
+
+        player.update(dt);
+
+        hud.update(dt);
+
         gameCamera.position.x = player.b2body.getPosition().x;
 
         gameCamera.update();
@@ -171,6 +159,11 @@ public class PlayScreen implements Screen
 
         //render our Box2DDebugLines
         b2dr.render(world,gameCamera.combined);
+        game.batch.setProjectionMatrix(gameCamera.combined);
+
+        game.batch.begin();
+        player.draw(game.batch);
+        game.batch.end();
 
 
 
@@ -183,6 +176,17 @@ public class PlayScreen implements Screen
     public void resize(int width, int height)
     {
         gamePort.update(width, height);
+    }
+
+    public TiledMap getMap()
+    {
+        return map;
+
+    }
+
+    public World getWorld()
+    {
+        return world;
     }
 
     @Override
@@ -202,6 +206,10 @@ public class PlayScreen implements Screen
 
     @Override
     public void dispose() {
-
+        map.dispose();
+        renderer.dispose();
+        world.dispose();
+        b2dr.dispose();
+        hud.dispose();
     }
 }

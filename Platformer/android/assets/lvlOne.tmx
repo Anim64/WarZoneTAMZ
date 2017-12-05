@@ -78,4 +78,5 @@
  <objectgroup name="Goal">
   <object id="66" x="3751" y="50" width="10" height="127"/>
  </objectgroup>
+ <objectgroup name="Life"/>
 </map>

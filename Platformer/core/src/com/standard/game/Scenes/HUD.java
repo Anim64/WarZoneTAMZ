@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.standard.game.PlatformerGame;
@@ -15,25 +16,25 @@ import com.standard.game.PlatformerGame;
  * Created by Standard on 02.12.2017.
  */
 
-public class HUD
+public class HUD implements Disposable
 {
     public Stage stage;
     private Viewport viewport;
 
     private Integer worldTimer;
     private float timeCount;
-    private Integer score;
+    private static Integer score;
 
-    Label countDownLabel;
-    Label scoreLabel;
-    Label timeLabel;
-    Label levelLabel;
-    Label worldLabel;
-    Label warZoneLabel;
+    private Label countDownLabel;
+    private static Label  scoreLabel;
+    private Label timeLabel;
+    private Label levelLabel;
+    private Label worldLabel;
+    private Label warZoneLabel;
 
     public HUD(SpriteBatch sb)
     {
-        worldTimer = 300;
+        worldTimer = 0;
         timeCount = 0;
         score = 0;
         viewport = new FitViewport(PlatformerGame.V_WIDTH, PlatformerGame.V_WIDTH, new OrthographicCamera());
@@ -60,4 +61,26 @@ public class HUD
         stage.addActor(table);
     }
 
+    public void update(float dt)
+    {
+        timeCount += dt;
+        if(timeCount >= 1)
+        {
+            worldTimer++;
+            countDownLabel.setText(String.format("%03d", worldTimer));
+            timeCount = 0;
+        }
+    }
+
+    public static void addScore(int value)
+    {
+        score += value;
+        scoreLabel.setText(String.format("%06d", score));
+    }
+
+    @Override
+    public void dispose()
+    {
+        stage.dispose();
+    }
 }
