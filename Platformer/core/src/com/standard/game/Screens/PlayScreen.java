@@ -6,31 +6,28 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.standard.game.PlatformerGame;
 import com.standard.game.Scenes.HUD;
-import com.standard.game.Sprites.Goomba;
+import com.standard.game.Sprites.Enemies.Enemy;
+import com.standard.game.Sprites.Items.Item;
+import com.standard.game.Sprites.Items.ItemDef;
+import com.standard.game.Sprites.Items.Mushroom;
 import com.standard.game.Sprites.Player;
 import com.standard.game.Tools.B2WorldCreator;
 import com.standard.game.Tools.WorldContactListener;
+
+import java.util.PriorityQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by Standard on 02.12.2017.
@@ -53,12 +50,16 @@ public class PlayScreen implements Screen
 
     private World world;
     private Box2DDebugRenderer b2dr;
+    private B2WorldCreator creator;
 
      private Player player;
 
-    private Goomba goomba;
+
 
     private Music music;
+
+    private Array<Item> items;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     public PlayScreen(PlatformerGame game)
     {
@@ -82,7 +83,7 @@ public class PlayScreen implements Screen
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        new B2WorldCreator(this);
+         creator = new B2WorldCreator(this);
 
         //create player
         player = new Player(this);
@@ -93,9 +94,31 @@ public class PlayScreen implements Screen
         music.setLooping(true);
         music.play();
 
-        goomba = new Goomba(this, .32f, .32f);
+        items = new Array<Item>();
+        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
 
 
+
+
+
+
+    }
+
+    public void spawnItem(ItemDef iDef)
+    {
+        itemsToSpawn.add(iDef);
+    }
+
+    public void handleSpawningItems()
+    {
+        if(!itemsToSpawn.isEmpty())
+        {
+            ItemDef iDef = itemsToSpawn.poll();
+            if(iDef.type == Mushroom.class)
+            {
+                items.add(new Mushroom(this, iDef.position.x, iDef.position.y));
+            }
+        }
     }
 
     public TextureAtlas getAtlas()
@@ -132,11 +155,25 @@ public class PlayScreen implements Screen
     public void update(float dt)
     {
         handleInput(dt);
+        handleSpawningItems();
 
         world.step(1/60f, 6, 2);
 
         player.update(dt);
-        goomba.update(dt);
+
+        for(Enemy enemy : creator.getGoombas())
+        {
+            enemy.update(dt);
+            if(enemy.getX() < player.getX() + 224 / PlatformerGame.PPM)
+            {
+                enemy.b2body.setActive(true);
+            }
+        }
+
+        for(Item item: items)
+        {
+            item.update(dt);
+        }
 
         hud.update(dt);
 
@@ -166,7 +203,15 @@ public class PlayScreen implements Screen
 
         game.batch.begin();
         player.draw(game.batch);
-        goomba.draw(game.batch);
+        for(Enemy enemy : creator.getGoombas())
+        {
+            enemy.draw(game.batch);
+        }
+
+        for(Item item: items)
+        {
+            item.draw(game.batch);
+        }
         game.batch.end();
 
 

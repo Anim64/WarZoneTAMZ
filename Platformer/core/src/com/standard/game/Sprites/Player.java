@@ -78,23 +78,26 @@ public class Player extends Sprite
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PlatformerGame.PPM);
 
-        fdef.filter.categoryBits = PlatformerGame.ENEMY_BIT;
+        fdef.filter.categoryBits = PlatformerGame.PLAYER_BIT;
         fdef.filter.maskBits = PlatformerGame.GROUND_BIT |
                                 PlatformerGame.COIN_BIT |
                                 PlatformerGame.BRICK_BIT |
                                 PlatformerGame.ENEMY_BIT |
-                                PlatformerGame.OBJECT_BIT;
+                                PlatformerGame.OBJECT_BIT |
+                                PlatformerGame.ENEMY_HEAD_BIT |
+                                PlatformerGame.ITEM_BIT;
 
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
 
         EdgeShape head = new EdgeShape();
         head.set(new Vector2(-2 / PlatformerGame.PPM, 6 / PlatformerGame.PPM), new Vector2(2 / PlatformerGame.PPM, 6 / PlatformerGame.PPM));
+        fdef.filter.categoryBits = PlatformerGame.PLAYER_HEAD_BIT;
         fdef.shape = head;
         fdef.isSensor = true;
 
-        b2body.createFixture(fdef). setUserData("head");
+        b2body.createFixture(fdef).setUserData(this);
     }
 
     public void update(float dt)

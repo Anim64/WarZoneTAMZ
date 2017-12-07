@@ -9,10 +9,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.standard.game.PlatformerGame;
 import com.standard.game.Screens.PlayScreen;
 import com.standard.game.Sprites.Coin;
 import com.standard.game.Sprites.Brick;
+import com.standard.game.Sprites.Enemies.Goomba;
 
 /**
  * Created by Standard on 03.12.2017.
@@ -20,6 +22,8 @@ import com.standard.game.Sprites.Brick;
 
 public class B2WorldCreator
 {
+    private Array<Goomba> goombas;
+
     public B2WorldCreator(PlayScreen screen)
     {
         World world = screen.getWorld();
@@ -61,17 +65,30 @@ public class B2WorldCreator
         //coin
         for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class))
         {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Coin(screen,rect);
+
+            new Coin(screen,object);
         }
 
         //brick
         for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class))
         {
+
+
+            new Brick(screen, object);
+        }
+
+        goombas = new Array<Goomba>();
+
+        for(MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class))
+        {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Brick(screen, rect);
+            goombas.add(new Goomba(screen, rect.getX() / PlatformerGame.PPM, rect.getY() / PlatformerGame.PPM));
         }
+    }
+
+    public Array<Goomba> getGoombas() {
+        return goombas;
     }
 }
