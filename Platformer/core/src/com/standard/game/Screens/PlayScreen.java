@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.standard.game.PlatformerGame;
 import com.standard.game.Scenes.HUD;
+import com.standard.game.Sprites.Goomba;
 import com.standard.game.Sprites.Player;
 import com.standard.game.Tools.B2WorldCreator;
 import com.standard.game.Tools.WorldContactListener;
@@ -38,8 +39,8 @@ import com.standard.game.Tools.WorldContactListener;
 public class PlayScreen implements Screen
 {
     private PlatformerGame game;
-    private TextureAtlas playerAtlas;
-    private TextureAtlas enemiesAtlas;
+    private TextureAtlas atlas;
+
 
     private OrthographicCamera gameCamera;
     private Viewport gamePort;
@@ -55,12 +56,14 @@ public class PlayScreen implements Screen
 
      private Player player;
 
+    private Goomba goomba;
+
     private Music music;
 
     public PlayScreen(PlatformerGame game)
     {
-        playerAtlas = new TextureAtlas("Player.pack");
-        enemiesAtlas = new TextureAtlas("Enemies.pack");
+        atlas = new TextureAtlas("Mario_and_Enemies.pack");
+
         this.game = game;
 
         gameCamera = new OrthographicCamera();
@@ -70,7 +73,7 @@ public class PlayScreen implements Screen
         hud = new HUD(game.batch);
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("lvlOne.tmx");
+        map = mapLoader.load("level1.tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PlatformerGame.PPM);
 
@@ -86,22 +89,21 @@ public class PlayScreen implements Screen
 
         world.setContactListener(new WorldContactListener());
 
-        music = PlatformerGame.manager.get("music/music.ogg", Music.class);
+        music = PlatformerGame.manager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
         music.play();
 
+        goomba = new Goomba(this, .32f, .32f);
+
 
     }
 
-    public TextureAtlas getPlayerAtlas()
+    public TextureAtlas getAtlas()
     {
-        return playerAtlas;
+        return atlas;
     }
 
-    public TextureAtlas getEnemiesAtlas()
-    {
-        return enemiesAtlas;
-    }
+
 
     @Override
     public void show() {
@@ -134,6 +136,7 @@ public class PlayScreen implements Screen
         world.step(1/60f, 6, 2);
 
         player.update(dt);
+        goomba.update(dt);
 
         hud.update(dt);
 
@@ -163,6 +166,7 @@ public class PlayScreen implements Screen
 
         game.batch.begin();
         player.draw(game.batch);
+        goomba.draw(game.batch);
         game.batch.end();
 
 

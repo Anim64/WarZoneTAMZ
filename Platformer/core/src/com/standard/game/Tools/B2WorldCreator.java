@@ -11,9 +11,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.standard.game.PlatformerGame;
 import com.standard.game.Screens.PlayScreen;
-import com.standard.game.Sprites.Goal;
-import com.standard.game.Sprites.Ground;
-import com.standard.game.Sprites.Life;
+import com.standard.game.Sprites.Coin;
+import com.standard.game.Sprites.Brick;
 
 /**
  * Created by Standard on 03.12.2017.
@@ -30,24 +29,8 @@ public class B2WorldCreator
         FixtureDef fDef = new FixtureDef();
         Body body;
 
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class))
-        {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            /*bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / PlatformerGame.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth()/2/ PlatformerGame.PPM, rect.getHeight()/2/ PlatformerGame.PPM);
-            fDef.shape = shape;
-            body.createFixture(fDef);*/
-
-            new Ground(screen,rect);
-        }
-
-        for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class))
-        {
+        //ground
+        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
@@ -55,23 +38,40 @@ public class B2WorldCreator
 
             body = world.createBody(bdef);
 
-            shape.setAsBox(rect.getWidth()/2/ PlatformerGame.PPM, rect.getHeight()/2/ PlatformerGame.PPM);
+            shape.setAsBox(rect.getWidth() / 2 / PlatformerGame.PPM, rect.getHeight() / 2 / PlatformerGame.PPM);
             fDef.shape = shape;
             body.createFixture(fDef);
         }
 
+        //pipes
+        for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / PlatformerGame.PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / PlatformerGame.PPM, rect.getHeight() / 2 / PlatformerGame.PPM);
+            fDef.shape = shape;
+            fDef.filter.categoryBits = PlatformerGame.OBJECT_BIT;
+            body.createFixture(fDef);
+        }
+
+        //coin
         for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class))
         {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Goal(screen,rect);
+            new Coin(screen,rect);
         }
 
+        //brick
         for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class))
         {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Life(screen, rect);
+            new Brick(screen, rect);
         }
     }
 }

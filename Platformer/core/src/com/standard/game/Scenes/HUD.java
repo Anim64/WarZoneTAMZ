@@ -34,7 +34,7 @@ public class HUD implements Disposable
 
     public HUD(SpriteBatch sb)
     {
-        worldTimer = 0;
+        worldTimer = 300;
         timeCount = 0;
         score = 0;
         viewport = new FitViewport(PlatformerGame.V_WIDTH, PlatformerGame.V_WIDTH, new OrthographicCamera());
@@ -66,7 +66,7 @@ public class HUD implements Disposable
         timeCount += dt;
         if(timeCount >= 1)
         {
-            worldTimer++;
+            worldTimer--;
             countDownLabel.setText(String.format("%03d", worldTimer));
             timeCount = 0;
         }

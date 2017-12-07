@@ -35,7 +35,7 @@ public class Player extends Sprite
 
     public Player(PlayScreen screen)
     {
-        super(screen.getPlayerAtlas().findRegion("Player"));
+        super(screen.getAtlas().findRegion("little_mario"));
         this.world = screen.getWorld();
 
         currentState = State.STANDING;
@@ -44,16 +44,16 @@ public class Player extends Sprite
         runningRight = true;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        for(int i = 0; i < 6; i++)
+        for(int i = 1; i < 4; i++)
         {
-            frames.add(new TextureRegion(getTexture(), i* 20, 44, 16, 42));
+            frames.add(new TextureRegion(getTexture(), i* 16, 0, 16, 16));
         }
         playerRun = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
-        for(int i = 6; i < 9; i++)
+        for(int i = 4; i < 6; i++)
         {
-            frames.add(new TextureRegion(getTexture(), i* 20, 44, 16, 42));
+            frames.add(new TextureRegion(getTexture(), i* 16, 0, 16, 16));
         }
 
         playerJump = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.1f, frames);
@@ -62,15 +62,15 @@ public class Player extends Sprite
 
 
         definePlayer();
-        playerStand = new TextureRegion(getTexture(),0,0,22,42);
-        setBounds(0,0, 22 / PlatformerGame.PPM, 42 / PlatformerGame.PPM);
+        playerStand = new TextureRegion(getTexture(),0,0,16,16);
+        setBounds(0,0, 16 / PlatformerGame.PPM, 16 / PlatformerGame.PPM);
         setRegion(playerStand);
     }
 
     public void definePlayer()
     {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(20 / PlatformerGame.PPM,32 / PlatformerGame.PPM);
+        bodyDef.position.set(32 / PlatformerGame.PPM,32 / PlatformerGame.PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bodyDef);
 
@@ -78,8 +78,12 @@ public class Player extends Sprite
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PlatformerGame.PPM);
 
-        fdef.filter.categoryBits = PlatformerGame.PLAYER_BIT;
-        fdef.filter.maskBits = PlatformerGame.GROUND_BIT | PlatformerGame.LIFE_BIT | PlatformerGame.BRICK_BIT;
+        fdef.filter.categoryBits = PlatformerGame.ENEMY_BIT;
+        fdef.filter.maskBits = PlatformerGame.GROUND_BIT |
+                                PlatformerGame.COIN_BIT |
+                                PlatformerGame.BRICK_BIT |
+                                PlatformerGame.ENEMY_BIT |
+                                PlatformerGame.OBJECT_BIT;
 
 
         fdef.shape = shape;

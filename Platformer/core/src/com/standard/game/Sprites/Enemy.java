@@ -23,5 +23,6 @@ public abstract class Enemy extends Sprite
         setPosition(x,y);
     }
 
+
     protected abstract void defineEnemy();
 }
