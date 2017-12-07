@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="153">
- <tileset firstgid="1" name="tileset_gutter" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="924">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="154">
+ <tileset firstgid="1" name="tileset_gutter" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="924" columns="33">
   <image source="tileset_gutter.png" width="594" height="504"/>
   <tile id="0">
    <properties>
@@ -113,12 +113,12 @@
  </tileset>
  <layer name="Background Color" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJztwzEJAAAMA7Ay/4bqrir2JZBeUlVVVVVVVVVVVVVV1ccDxULniQ==
+   eJzt06ENADAMBLGo+y+U2Uq6Q1FeMTA/cn2qGljnDmgA/vgXcvkXcvkXcvkXAAAAAAAAYI4H0bro0w==
   </data>
  </layer>
  <layer name="Graphic Layer" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJztl01OwzAQhd2wAtoiYNWtl0CLBBSk3oyDAGsuAeRs2TBRO8p08PgndpomWOqnOM7Yfh77xU1ZKFXuOFFNOZPJDAvuX7yvr1XRQOspb1D3DnxEaMA+YvuJGTt23KHPIevfspgcdu4xoC/Ro1jH6+k9ra/LX3D9Bn488irlFvuw9dPVfnDpH8Mcsn5/NpNw/X1Bz1V6j16WPEuhbW1rk3JvxO6Htv0NdQ5Zvz/o39R7qAu4f8vir39pHfd3xfpa/KNvafhZkWJjchTaVtKDzxY7TM/HhlZbXHGbAf5/pmep9N3b9vzNZPpGq/H613RfMUpDWYrLZI4Jrcbr30xmzGiVzr9T1dD3vGLh32EF+Y7q8nvqFHJ7BiiP/kNifUkxP6ltIfRLcy2VffoPGRPRylx2oVX7tlxb23yjBo6rneTfGbSdAxeR+wn3ZUwfx0b93/vTY2438OyWePIqIPZYsc2hT7TBg9qQS65fG7wite1auwmXfpN/6zN3SYg5g3Ff9r2+IfvO953jmhv15CVcH4BrId7l32PwjWsOKdcgBG3xIK3j+rXgFVMd1R97JtH2XIOkScq/yb/z3dm7Uk05dA3OIW4KzA7s3zWM9Ux4mdj33ZrEYZ3vO4fGrdmYFXmO4z9adGBsCv0pcsf785lDyjXwhe93HJPXc/02r/B6rp/vj1D92N6kQdJE9T+xd5Dk33vi31fHGnDuIGYJrBL4tz6WMvukyk3Oc/qcZvb5BRdfbQI=
+   eJztl81OwzAMx7PdgG0IOO2aI7AhAQNpb8aDwM68BLBn6wVPWzTPsvPRpOuHLPETXes4f7v5N+12bMz2QIWOFUXpF1UCXPwn8AVsMjS4HLl5cubOnbfvNaj+PfPReWvPIcafIX6AX+Avoq9Sb10OX56m1kNI/xBqUP3xrEfp+tsC+xb/TvEyHuu7NyXXRu56qJuvrzWo/nicf0uvoSZIfVfmruNcc9N+TecC/rxIsTk9Sh0r6XHX5ge460PDmj2huHWP35/rgHO1XY+icFgzXP9yv317cShOUbqENcP1r6IMGWvK+XdijrRdVy70O2yMvqOa/J66gN5eAiYif0psLCXqk8aOhby419JxTP6UOR3W8MchrKk/lmqr22+ngRIaJ/l3CmNnwHXmenLrMidH19i9e39H1HYP1x6QJ28TYruKr4Y2sYwHLdNLqt8yXpHGNq2dI6Sf8+9uz10gcvZgty7bvr8p6y72mROqDXvyBv4/A3dCfMi/XfBNqIaS9yAF6/EgPkf1W8Er3DmsP3dPwuOpBkmT1H/Ov7PD3rs0x+PUe3AFcRNgemb/rmCuN8T7yL/uVijOnYt95uC4FZmzQtfd/C8eHS62hP4SvaP5YmooeQ9ioevdzUnPU/0+r9DzVD9dH6n63XhOg6QJ638lzyDJv0/Ivx+Be0B5hJgFsCzg3922pJxSqjfa5/I9VU75B727kr4=
   </data>
  </layer>
  <objectgroup name="Ground">
@@ -233,5 +233,8 @@
   <object id="150" x="400" y="176" width="16" height="16"/>
   <object id="151" x="864" y="176" width="16" height="16"/>
   <object id="152" x="2352" y="176" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup name="Goal">
+  <object id="153" x="3186" y="18" width="13" height="156"/>
  </objectgroup>
 </map>

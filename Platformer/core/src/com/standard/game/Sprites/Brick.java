@@ -27,9 +27,18 @@ public class Brick extends InteractiveTileObject
     public void onHeadHit(Player player) {
 
         Gdx.app.log("Brick", "Collision");
-        setCategoryFilter(PlatformerGame.DESTROYED_BIT);
-        getCell().setTile(null);
-        HUD.addScore(200);
-        PlatformerGame.manager.get("audio/sounds/breakblock.wav", Sound.class).play();
+        if(player.isBig())
+        {
+            setCategoryFilter(PlatformerGame.DESTROYED_BIT);
+            getCell().setTile(null);
+            HUD.addScore(200);
+            PlatformerGame.manager.get("audio/sounds/breakblock.wav", Sound.class).play();
+        }
+
+        else
+        {
+            PlatformerGame.manager.get("audio/sounds/bump.wav", Sound.class).play();
+        }
+
     }
 }

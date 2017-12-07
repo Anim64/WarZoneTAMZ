@@ -14,7 +14,9 @@ import com.standard.game.PlatformerGame;
 import com.standard.game.Screens.PlayScreen;
 import com.standard.game.Sprites.Coin;
 import com.standard.game.Sprites.Brick;
+import com.standard.game.Sprites.Enemies.Enemy;
 import com.standard.game.Sprites.Enemies.Goomba;
+import com.standard.game.Sprites.Enemies.Turtle;
 
 /**
  * Created by Standard on 03.12.2017.
@@ -23,6 +25,7 @@ import com.standard.game.Sprites.Enemies.Goomba;
 public class B2WorldCreator
 {
     private Array<Goomba> goombas;
+    private static Array<Turtle> turtles;
 
     public B2WorldCreator(PlayScreen screen)
     {
@@ -86,9 +89,46 @@ public class B2WorldCreator
 
             goombas.add(new Goomba(screen, rect.getX() / PlatformerGame.PPM, rect.getY() / PlatformerGame.PPM));
         }
+
+        turtles = new Array<Turtle>();
+
+        for(MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class))
+        {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            turtles.add(new Turtle(screen, rect.getX() / PlatformerGame.PPM, rect.getY() / PlatformerGame.PPM));
+        }
+
+        for(MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PlatformerGame.PPM, (rect.getY() + rect.getHeight() / 2) / PlatformerGame.PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / PlatformerGame.PPM, rect.getHeight() / 2 / PlatformerGame.PPM);
+            fDef.shape = shape;
+            fDef.filter.categoryBits = PlatformerGame.GOAL_BIT;
+            body.createFixture(fDef);
+        }
     }
 
     public Array<Goomba> getGoombas() {
         return goombas;
+    }
+
+    public static void removeTurtle(Turtle turtle)
+    {
+        turtles.removeValue(turtle, true);
+    }
+
+    public Array<Enemy> getEnemies()
+    {
+        Array<Enemy> enemies = new Array<Enemy>();
+        enemies.addAll(goombas);
+        enemies.addAll(turtles);
+
+        return enemies;
     }
 }

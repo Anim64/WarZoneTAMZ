@@ -46,9 +46,9 @@ public class WorldContactListener implements ContactListener
             {
 
                     if(fixA.getFilterData().categoryBits == PlatformerGame.ENEMY_HEAD_BIT)
-                        ((Enemy)fixA.getUserData()).hitOnHead();
+                        ((Enemy)fixA.getUserData()).hitOnHead((Player) fixB.getUserData());
                     else
-                        ((Enemy)fixB.getUserData()).hitOnHead();
+                        ((Enemy)fixB.getUserData()).hitOnHead((Player) fixA.getUserData());
                     break;
             }
 
@@ -63,14 +63,17 @@ public class WorldContactListener implements ContactListener
 
             case PlatformerGame.PLAYER_BIT | PlatformerGame.ENEMY_BIT:
             {
-                Gdx.app.log("MARIO", "DIED");
+                if(fixA.getFilterData().categoryBits == PlatformerGame.PLAYER_BIT)
+                    ((Player) fixA.getUserData()).hit((Enemy)fixB.getUserData());
+                else
+                    ((Player) fixB.getUserData()).hit((Enemy)fixA.getUserData());
                 break;
             }
 
             case PlatformerGame.ENEMY_BIT | PlatformerGame.ENEMY_BIT:
             {
-                ((Enemy)fixA.getUserData()).reverseVelocity(true, false);
-                ((Enemy)fixB.getUserData()).reverseVelocity(true, false);
+                ((Enemy)fixA.getUserData()).onEnemyHit((Enemy)fixB.getUserData());
+                ((Enemy)fixB.getUserData()).onEnemyHit((Enemy)fixA.getUserData());
                 break;
             }
 
@@ -89,6 +92,51 @@ public class WorldContactListener implements ContactListener
                     ((Item)fixA.getUserData()).use((Player) fixB.getUserData());
                 else
                     ((Item)fixB.getUserData()).use((Player) fixA.getUserData());
+                break;
+            }
+
+            case PlatformerGame.PLAYER_BIT | PlatformerGame.GROUND_BIT:
+            {
+                if(fixA.getFilterData().categoryBits == PlatformerGame.PLAYER_BIT)
+                   ((Player) fixA.getUserData()).setOnGround(true);
+                else
+                    ((Player) fixB.getUserData()).setOnGround(true);
+                break;
+            }
+
+            case PlatformerGame.PLAYER_BIT | PlatformerGame.COIN_BIT:
+            {
+                if(fixA.getFilterData().categoryBits == PlatformerGame.PLAYER_BIT)
+                    ((Player) fixA.getUserData()).setOnGround(true);
+                else
+                    ((Player) fixB.getUserData()).setOnGround(true);
+                break;
+            }
+
+            case PlatformerGame.PLAYER_BIT | PlatformerGame.OBJECT_BIT:
+            {
+                if(fixA.getFilterData().categoryBits == PlatformerGame.PLAYER_BIT)
+                    ((Player) fixA.getUserData()).setOnGround(true);
+                else
+                    ((Player) fixB.getUserData()).setOnGround(true);
+                break;
+            }
+
+            case PlatformerGame.PLAYER_BIT | PlatformerGame.BRICK_BIT:
+            {
+                if(fixA.getFilterData().categoryBits == PlatformerGame.PLAYER_BIT)
+                    ((Player) fixA.getUserData()).setOnGround(true);
+                else
+                    ((Player) fixB.getUserData()).setOnGround(true);
+                break;
+            }
+
+            case PlatformerGame.PLAYER_BIT | PlatformerGame.GOAL_BIT:
+            {
+                if(fixA.getFilterData().categoryBits == PlatformerGame.PLAYER_BIT)
+                    ((Player) fixA.getUserData()).currentState = Player.State.WON;
+                else
+                    ((Player) fixB.getUserData()).currentState = Player.State.WON;
                 break;
             }
         }

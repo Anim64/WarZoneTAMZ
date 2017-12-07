@@ -1,5 +1,6 @@
 package com.standard.game.Sprites.Enemies;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.standard.game.PlatformerGame;
 import com.standard.game.Screens.PlayScreen;
+import com.standard.game.Sprites.Player;
 
 /**
  * Created by Standard on 05.12.2017.
@@ -97,6 +99,18 @@ public class Goomba extends com.standard.game.Sprites.Enemies.Enemy
 
     }
 
+    public void onEnemyHit(Enemy enemy)
+    {
+        if(enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.MOVING_SHELL)
+        {
+            setToDestroy = true;
+        }
+        else
+        {
+            reverseVelocity(true, false);
+        }
+    }
+
     public void draw(Batch batch)
     {
         if(!destroyed || stateTime < 1)
@@ -106,8 +120,9 @@ public class Goomba extends com.standard.game.Sprites.Enemies.Enemy
     }
 
     @Override
-    public void hitOnHead()
+    public void hitOnHead(Player player)
     {
         setToDestroy = true;
+        PlatformerGame.manager.get("audio/sounds/stomp.wav", Sound.class).play();
     }
 }

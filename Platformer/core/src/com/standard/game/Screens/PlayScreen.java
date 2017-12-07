@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.standard.game.Controller;
 import com.standard.game.PlatformerGame;
 import com.standard.game.Scenes.HUD;
 import com.standard.game.Sprites.Enemies.Enemy;
@@ -26,8 +27,10 @@ import com.standard.game.Sprites.Player;
 import com.standard.game.Tools.B2WorldCreator;
 import com.standard.game.Tools.WorldContactListener;
 
-import java.util.PriorityQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import static com.standard.game.Sprites.Player.State.DEAD;
+import static com.standard.game.Sprites.Player.State.WON;
 
 /**
  * Created by Standard on 02.12.2017.
@@ -37,6 +40,8 @@ public class PlayScreen implements Screen
 {
     private PlatformerGame game;
     private TextureAtlas atlas;
+
+    Controller controller;
 
 
     private OrthographicCamera gameCamera;
@@ -88,6 +93,8 @@ public class PlayScreen implements Screen
         //create player
         player = new Player(this);
 
+        controller = new Controller(game);
+
         world.setContactListener(new WorldContactListener());
 
         music = PlatformerGame.manager.get("audio/music/mario_music.ogg", Music.class);
@@ -133,23 +140,23 @@ public class PlayScreen implements Screen
 
     }
 
-    public void handleInput(float dt)
+    public void handleInput(float dt) {
+    if(player.currentState != DEAD)
     {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
-        {
+        if (controller.isUpPressed() && player.isOnGround()) {
+            player.setOnGround(false);
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
 
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
-        {
+        if (controller.isRightPressed() && player.b2body.getLinearVelocity().x <= 2) {
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
-        {
+        if (controller.isLeftPressed() && player.b2body.getLinearVelocity().x >= -2) {
             player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
         }
+    }
     }
 
     public void update(float dt)
@@ -161,7 +168,7 @@ public class PlayScreen implements Screen
 
         player.update(dt);
 
-        for(Enemy enemy : creator.getGoombas())
+        for(Enemy enemy : creator.getEnemies())
         {
             enemy.update(dt);
             if(enemy.getX() < player.getX() + 224 / PlatformerGame.PPM)
@@ -177,7 +184,11 @@ public class PlayScreen implements Screen
 
         hud.update(dt);
 
-        gameCamera.position.x = player.b2body.getPosition().x;
+        if(player.currentState != DEAD)
+        {
+            gameCamera.position.x = player.b2body.getPosition().x;
+        }
+
 
         gameCamera.update();
         renderer.setView(gameCamera);
@@ -203,7 +214,7 @@ public class PlayScreen implements Screen
 
         game.batch.begin();
         player.draw(game.batch);
-        for(Enemy enemy : creator.getGoombas())
+        for(Enemy enemy : creator.getEnemies())
         {
             enemy.draw(game.batch);
         }
@@ -219,12 +230,36 @@ public class PlayScreen implements Screen
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+        controller.draw();
+
+        if(gameOver() || hud.isWorldTimerZero())
+        {
+            game.setScreen(new GameOverScreen(game));
+        }
+
+        if(winTheGame())
+        {
+            game.setScreen(new WinScreen(game));
+        }
+    }
+
+    public boolean gameOver()
+    {
+        return player.currentState == DEAD && player.getStateTimer() > 3;
+
+    }
+
+    public boolean winTheGame()
+    {
+        return player.currentState == WON && player.getStateTimer() > 3;
     }
 
     @Override
     public void resize(int width, int height)
     {
+
         gamePort.update(width, height);
+        controller.resize(width, height);
     }
 
     public TiledMap getMap()

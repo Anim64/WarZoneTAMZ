@@ -53,7 +53,7 @@ public class Coin extends InteractiveTileObject
             {
                 PlatformerGame.manager.get("audio/sounds/coin.wav", Sound.class).play();
             }
-           
+
 
         }
         getCell().setTile(tileSet.getTile(BLANK_COIN));

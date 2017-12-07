@@ -34,7 +34,7 @@ public class HUD implements Disposable
 
     public HUD(SpriteBatch sb)
     {
-        worldTimer = 300;
+        worldTimer = 5;
         timeCount = 0;
         score = 0;
         viewport = new FitViewport(PlatformerGame.V_WIDTH, PlatformerGame.V_WIDTH, new OrthographicCamera());
@@ -49,7 +49,7 @@ public class HUD implements Disposable
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         levelLabel = new Label("1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("World", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        warZoneLabel = new Label("WarZone", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        warZoneLabel = new Label("MARIO", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         table.add(warZoneLabel).expandX().padTop(10);
         table.add(worldLabel).expandX().padTop(10);
@@ -82,5 +82,10 @@ public class HUD implements Disposable
     public void dispose()
     {
         stage.dispose();
+    }
+
+    public boolean isWorldTimerZero()
+    {
+        return worldTimer <= 0;
     }
 }
