@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="154">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="157">
  <tileset firstgid="1" name="tileset_gutter" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="924" columns="33">
   <image source="tileset_gutter.png" width="594" height="504"/>
   <tile id="0">
@@ -236,5 +236,10 @@
  </objectgroup>
  <objectgroup name="Goal">
   <object id="153" x="3186" y="18" width="13" height="156"/>
+ </objectgroup>
+ <objectgroup name="Pit">
+  <object id="154" x="1107" y="205" width="28" height="2"/>
+  <object id="155" x="1395" y="205" width="44" height="3"/>
+  <object id="156" x="2466" y="205" width="29" height="2"/>
  </objectgroup>
 </map>

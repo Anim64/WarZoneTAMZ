@@ -139,6 +139,15 @@ public class WorldContactListener implements ContactListener
                     ((Player) fixB.getUserData()).currentState = Player.State.WON;
                 break;
             }
+
+            case PlatformerGame.PLAYER_BIT | PlatformerGame.PIT_BIT:
+            {
+                if(fixA.getFilterData().categoryBits == PlatformerGame.PLAYER_BIT)
+                    ((Player) fixA.getUserData()).hit(null);
+                else
+                    ((Player) fixB.getUserData()).hit(null);
+                break;
+            }
         }
     }
 

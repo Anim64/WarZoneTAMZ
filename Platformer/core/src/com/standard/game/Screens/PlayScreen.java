@@ -2,6 +2,7 @@ package com.standard.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -63,6 +64,7 @@ public class PlayScreen implements Screen
 
     private Music music;
 
+
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
@@ -97,9 +99,20 @@ public class PlayScreen implements Screen
 
         world.setContactListener(new WorldContactListener());
 
+        Preferences pref = Gdx.app.getPreferences("Preferences");
+
+        boolean test = pref.getBoolean("soundOn");
+
         music = PlatformerGame.manager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
-        music.play();
+
+        if(test)
+        {
+
+            music.play();
+        }
+
+
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
@@ -155,6 +168,15 @@ public class PlayScreen implements Screen
 
         if (controller.isLeftPressed() && player.b2body.getLinearVelocity().x >= -2) {
             player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+        }
+
+        if(controller.isSoundOn() && !music.isPlaying())
+        {
+            music.play();
+        }
+        else if(!controller.isSoundOn() && music.isPlaying())
+        {
+            music.stop();
         }
     }
     }

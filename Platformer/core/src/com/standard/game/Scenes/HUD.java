@@ -34,7 +34,7 @@ public class HUD implements Disposable
 
     public HUD(SpriteBatch sb)
     {
-        worldTimer = 5;
+        worldTimer = 300;
         timeCount = 0;
         score = 0;
         viewport = new FitViewport(PlatformerGame.V_WIDTH, PlatformerGame.V_WIDTH, new OrthographicCamera());

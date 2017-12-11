@@ -1,6 +1,8 @@
 package com.standard.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -21,7 +23,7 @@ public class Controller
     Viewport viewport;
     Stage stage;
     Stage stage2;
-    boolean upPressed, downPressed, leftPressed, rightPressed;
+    boolean upPressed, downPressed, leftPressed, rightPressed, soundOn, topScorePressed;
     OrthographicCamera camera;
 
     public Controller(PlatformerGame game)
@@ -33,9 +35,12 @@ public class Controller
 
         Gdx.input.setInputProcessor(stage);
 
+        Preferences pref = Gdx.app.getPreferences("Preferences");
 
-        Table tableLeft = new Table();
-        tableLeft.left().bottom();
+        soundOn = pref.getBoolean("soundOn");
+
+
+
 
 
 
@@ -73,19 +78,6 @@ public class Controller
             }
         });
 
-        tableLeft.add().padRight(20f);
-        tableLeft.add(leftImg).size(leftImg.getWidth(), leftImg.getHeight());
-        tableLeft.add().padRight(40f);
-        tableLeft.add(rightImg).size(rightImg.getWidth(), rightImg.getHeight()).padRight(550);
-
-
-        stage.addActor(tableLeft);
-
-
-
-        Table tableRight = new Table();
-        tableRight.right().bottom();
-
         Image upImg = new Image(new Texture("Controller/up.png"));
         upImg.setSize(50, 50);
         upImg.addListener(new InputListener()
@@ -103,9 +95,86 @@ public class Controller
             }
         });
 
-        tableLeft.add(upImg).size(upImg.getWidth(), upImg.getHeight());
+        Image soundOnImg = new Image(new Texture("audio/soundon.png"));
+        soundOnImg.setSize(50, 50);
+        soundOnImg.addListener(new InputListener()
+        {
 
-        //stage2.addActor(tableRight);
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                soundOn = !soundOn;
+                Preferences pref = Gdx.app.getPreferences("Preferences");
+
+                pref.putBoolean("soundOn", soundOn);
+
+                pref.flush();
+            }
+        });
+
+        Image soundOffImg = new Image(new Texture("audio/soundoff.png"));
+        soundOffImg.setSize(50, 50);
+        soundOffImg.addListener(new InputListener()
+        {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+            }
+        });
+
+        Image topScoreImg = new Image(new Texture("topscore.png"));
+        topScoreImg.setSize(50, 50);
+        topScoreImg.addListener(new InputListener()
+        {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+            }
+        });
+
+
+
+        Table table = new Table();
+        table.left().bottom();
+        table.add();
+        table.add(soundOnImg).size(soundOnImg.getWidth(), soundOnImg.getHeight()).padBottom(350);
+        table.add();
+        table.add(topScoreImg).size(topScoreImg.getWidth(), topScoreImg.getHeight()).padLeft(570).padBottom(350);
+
+        table.row();
+
+        table.add(leftImg).size(leftImg.getWidth(), leftImg.getHeight());
+        table.add();
+        table.add(rightImg).size(rightImg.getWidth(), rightImg.getHeight());
+
+        table.add(upImg).size(upImg.getWidth(), upImg.getHeight()).padLeft(570);
+
+
+
+        stage.addActor(table);
+
+
+
+
 
     }
 
@@ -133,5 +202,13 @@ public class Controller
     public void resize(int width, int height)
     {
         viewport.update(width, height);
+    }
+
+    public boolean isSoundOn() {
+        return soundOn;
+    }
+
+    public boolean isTopScorePressed() {
+        return topScorePressed;
     }
 }

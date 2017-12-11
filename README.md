@@ -1,20 +1,21 @@
 # WarZoneTAMZ
-![Image of Contra](https://static.getjar.com/ss/0c/863522_2.jpg)
+![Image of MarioGame](/Images/GameImage.png)
+![Image of GameOver](/Images/GameOverImage.png)
 
-WarZone is a 2D action and platform game where you control elite soldier. 
-You have to fight against the invading forces. The game brings all the fun plazers had when playing it's ancestors, such as Contra.
+Classic platformer returns on Android. Help famous plumber Mario rush through level, stomp enemies and collect coins. Enjoy the feeling many players had and now on your phone. 
 
-The goal is simple, bring destruction upon your enemies and survive as you progress through levels.
+
 
 ## Game features
 * Multiple levels
-* Neverending numbers of enemies
-* Blood pumping music and sound effect
+* Stomping Enemies
+* Classic Mario music
 * Item collecting
+* Simple AI
 
 ## Technical features
-* External storage use
-* Offline saving of preferences
+* Shared Preferences
+* External file loading
 * Music and sound effects - multimedia
 * 2D Game graphics
 * Game pause during phone call

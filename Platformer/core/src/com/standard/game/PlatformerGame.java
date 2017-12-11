@@ -28,6 +28,7 @@ public class PlatformerGame extends Game {
 	public static final short ITEM_BIT = 256;
 	public static final short PLAYER_HEAD_BIT = 512;
 	public static final short GOAL_BIT = 1024;
+	public static final short PIT_BIT = 2048;
 
 
 	public SpriteBatch batch;
